@@ -1,0 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Doto:wght@100..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Nabla&family=Noto+Sans+Arabic:wdth,wght@80.6,100..900&family=Stick+No+Bills:wght@200..800&display=swap');
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Jost', serif;
+}
