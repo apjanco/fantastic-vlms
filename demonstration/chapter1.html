@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>yikes! &#8212; Fantastic Futures -- Auto-cataloguing Workshop</title>
+    <title>British Library’s Endangered Archives Programme &#8212; Fantastic Futures -- Auto-cataloguing Workshop</title>
   
   
   
@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=cf10f607" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9e498a27" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -179,7 +179,9 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Technical Demonstration</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">yikes!</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">British Library’s Endangered Archives Programme</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="chapter2.html">text</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshop Exercises</span></p>
@@ -240,7 +242,7 @@
       
       
       
-      <li><a href="../_sources/demonstration/chapter1.md" target="_blank"
+      <li><a href="../_sources/demonstration/chapter1.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -250,7 +252,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -311,7 +313,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -322,11 +326,22 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>yikes!</h1>
+    <h1>British Library’s Endangered Archives Programme</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">British Library’s Endangered Archives Programme</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-read-the-manifest">How to read the manifest</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-with-metadata">Processing with Metadata</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -336,8 +351,343 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="yikes">
-<h1>yikes!<a class="headerlink" href="#yikes" title="Link to this heading">#</a></h1>
+  <p><img alt="" src="https://eap.bl.uk/themes/custom/eap/images/bl_logo_100.gif" /></p>
+<section class="tex2jax_ignore mathjax_ignore" id="british-library-s-endangered-archives-programme">
+<h1>British Library’s Endangered Archives Programme<a class="headerlink" href="#british-library-s-endangered-archives-programme" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://eap.bl.uk/">https://eap.bl.uk/</a></p>
+<p><a class="reference external" href="https://colab.research.google.com/drive/1Oo7oJK65RXVhzY3newmvGtG69vnVOjS-"><img alt="" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>Most collections in the Engangered Archives Programme are publised online. This allows you to view the scanned materials on the British Library’s site.</p>
+<p>It is also possible to access these collections as data. The BL provides access to both metadata and images using the International Image Interoperability Framework (IIIF).</p>
+<p>Let’s work from an example of photgraphs from the Romani heritage in the Republic of Moldova collection(EAP699).</p>
+<ol class="arabic simple">
+<li><p>Go to <a class="reference external" href="https://eap.bl.uk/project/EAP699">https://eap.bl.uk/project/EAP699</a></p></li>
+<li><p>Click on <a class="reference external" href="https://eap.bl.uk/project/EAP699/search">“View archives from this project”</a></p></li>
+<li><p>Find the item, in this case <a class="reference external" href="https://eap.bl.uk/modules/custom/cogapp_collection_pages/images/logo_iiif.png">“Photographs”</a></p></li>
+<li><p>Locate the IIIF icon (<img alt="" src="https://eap.bl.uk/modules/custom/cogapp_collection_pages/images/logo_iiif.png" />) and get the link. You can click on the icon and select the address. You can also right-click on the icon and select “copy link”.</p></li>
+<li><p>You should get something that looks like the manifest URL below.</p></li>
+</ol>
+<blockquote>
+<div><p>A IIIF manifest is a package of data that contains descriptive metadata as well as links to all images in the relevant item.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Manifest URL</span>
+<span class="n">manifest_url</span> <span class="o">=</span> <span class="s2">&quot;https://eap.bl.uk/archive-file/EAP699-23-1/manifest?manifest=https%3A//eap.bl.uk/archive-file/EAP699-23-1/manifest&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Fetch the manifest from EAP</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">srsly</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="c1"># The British Library blocks robots and other web crawlers from accessing their servers.  To signal that we are a human, we</span>
+<span class="c1"># add a User-Agent to the request to show that we&#39;re a human. Do not share this with robots.</span>
+<span class="n">header</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/11&quot;</span>
+<span class="p">}</span>
+<span class="n">manifest</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">manifest_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+  <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error downloading manifest: </span><span class="si">{</span><span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">srsly</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span><span class="s1">&#39;manifest.json&#39;</span><span class="p">,</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="c1"># &lt;-- In the files area to the left, you should now have a manifest.json file. Click on it to see the data.</span>
+
+<span class="n">manifest</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="how-to-read-the-manifest">
+<h1>How to read the manifest<a class="headerlink" href="#how-to-read-the-manifest" title="Link to this heading">#</a></h1>
+<p>#TODO, write this section<br />
+metadata<br />
+sequences<br />
+| canvases</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">canvas</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;sequences&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;canvases&quot;</span><span class="p">]:</span>
+  <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">canvas</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]:</span>
+    <span class="n">image_uri</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resource&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;@id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image_uri</span><span class="p">:</span>
+      <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_uri</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> images in manifest&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 4 images in manifest
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/1.jp2/full/full/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/2.jp2/full/full/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/3.jp2/full/full/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/full/0/default.jpg&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>What is contained in our images list? Let’s look at one of them using the index position in the list.</p>
+<p>Once displayed, copy the output and try loading it in the browser.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/full/0/default.jpg&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">images</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><img src="https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/full/0/default.jpg" width="400"/></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+<span class="c1"># @title Prompt</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the image for use as alt-text.&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Describe the image for use as alt-text.
+</pre>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gradio_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">handle_file</span>
+
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;apjanco/fantastic-futures&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+      <span class="n">image</span><span class="o">=</span><span class="n">handle_file</span><span class="p">(</span><span class="n">image</span><span class="p">),</span>
+      <span class="n">model_id</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen3-VL-30B-A3B-Instruct&quot;</span><span class="p">,</span>
+      <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+      <span class="n">api_name</span><span class="o">=</span><span class="s2">&quot;/run_example&quot;</span>
+  <span class="p">)</span>
+  <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded as API: https://apjanco-fantastic-futures.hf.space ✔
+(&#39;This is an old, sepia-toned photograph of a family, showing a man, a young &#39;
+ &#39;child, and a woman. The man, on the left, is balding with dark hair on the &#39;
+ &#39;sides, wearing a dark jacket over a lighter shirt. He has a serious &#39;
+ &#39;expression. In the center stands a young child, likely a boy, with a shaved &#39;
+ &#39;head and a solemn expression, wearing a textured, high-collared jacket. On &#39;
+ &#39;the right is a woman with dark, wavy hair, looking at the camera with a &#39;
+ &#39;gentle smile. She is wearing a dark, high-necked garment. The photograph is &#39;
+ &#39;encased in a dark frame with a decorative gold patterned border. The image &#39;
+ &#39;shows significant signs of aging, including a yellowed, sepia tint, visible &#39;
+ &#39;creases, and a prominent vertical rainbow-colored light flare or reflection &#39;
+ &#39;across the center. There is also a small tear at the top center of the &#39;
+ &#39;photograph.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/1c1cbb89bfec9cd25ef61142a5df9b6c370f2108e0f70dadf672e55f7526a222.png" src="../_images/1c1cbb89bfec9cd25ef61142a5df9b6c370f2108e0f70dadf672e55f7526a222.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;A vintage, yellowed class photograph of a group of young people, likely a &#39;
+ &#39;high school class from the 1970s or 1980s, arranged in several rows. The &#39;
+ &#39;students, a mix of boys and girls, are dressed in typical attire of the era, &#39;
+ &#39;including turtlenecks, sweaters, and suits. Most are looking directly at the &#39;
+ &#39;camera with serious expressions. The photograph is heavily damaged, showing &#39;
+ &#39;prominent cracks across the surface, particularly a large crack running &#39;
+ &#39;diagonally, and areas of fading and discoloration. A man in a suit and tie, &#39;
+ &#39;possibly the teacher, is seated in the front row, center.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/9c345eb2d9979c6647eaf1a19527b03efa4bda2be0e58551f993fecdbdb374d6.png" src="../_images/9c345eb2d9979c6647eaf1a19527b03efa4bda2be0e58551f993fecdbdb374d6.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;A weathered, vintage photograph shows a man and a woman posing together &#39;
+ &#39;outdoors. The man, on the left, has dark, wavy hair and a mustache, and &#39;
+ &#39;wears a light-colored, checkered shirt over a t-shirt. The woman, on the &#39;
+ &#39;right, wears a patterned headscarf and a dark vest over a light collared &#39;
+ &#39;shirt, with a gentle smile. The background is a blurry garden or foliage. &#39;
+ &#39;The photo is heavily damaged with creases, discoloration, and fading, giving &#39;
+ &#39;it an aged appearance.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/bf3086e450787311fb4138d927d8104b04ede9600a97e8514c4d0f591617558d.png" src="../_images/bf3086e450787311fb4138d927d8104b04ede9600a97e8514c4d0f591617558d.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;A vintage, framed portrait of a young man with dark, wavy hair and a serious &#39;
+ &#39;expression. He is wearing a dark suit jacket, a white collared shirt, and a &#39;
+ &#39;patterned tie with yellow and dark tones. The photograph is oval-shaped and &#39;
+ &#39;set within a decorative border featuring floral and bird motifs, birch &#39;
+ &#39;trees, and a landscape scene at the bottom. The entire image shows signs of &#39;
+ &#39;age, including discoloration, creases, and a reflective, iridescent surface &#39;
+ &#39;on the protective covering.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/07ec74dca7b6e42e4e87b98490309032547c48136f879a9da39204ee0ecb3b8c.png" src="../_images/07ec74dca7b6e42e4e87b98490309032547c48136f879a9da39204ee0ecb3b8c.png" />
+</div>
+</div>
+<p>The model above is hosted by HuggingFace Spaces. It uses ZeroGPU which is a shared and scalable GPU infrastructure for AI models. Anyone with a Pro subscription, £6.65 month, can create spaces that run on ZeroGPU. There is no charge for you to use it. The Space that we’re using is based on William Mattingly’s <a class="reference external" href="https://huggingface.co/spaces/wjbmattingly/caracal">Caracol</a>, which also provides free access to ZeroGPU.</p>
+<p>If you run into an error that <code class="docutils literal notranslate"><span class="pre">ReadTimeout:</span> <span class="pre">The</span> <span class="pre">read</span> <span class="pre">operation</span> <span class="pre">timed</span> <span class="pre">out</span></code> the space may have fallen asleep to reduce resources. Your request will cause the Space to come out of hibernation, but it needs about 5 minutes to reboot.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="processing-with-metadata">
+<h1>Processing with Metadata<a class="headerlink" href="#processing-with-metadata" title="Link to this heading">#</a></h1>
+<p>On its own the model gives relatively generic and unhelpful descriptions. However, we can use the metadata from the EAP when generating the description.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+<span class="c1"># @title Initial Prompt</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the contents of the image.&quot;&quot;&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Describe the contents of the image.
+</pre>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Prompt + Metadata</span>
+
+<span class="n">prompt</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Use the following metadata as context: </span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">manifest</span> <span class="o">=</span> <span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;manifest.json&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]:</span>
+  <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Describe the contents of the image.
+Use the following metadata as context: 
+Identifier: EAP699/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">23</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>
+Title: Photographs
+Place: Moldova, Europe
+Link to catalogue record: <span style="font-weight: bold">&lt;</span><span style="color: #ff00ff; text-decoration-color: #ff00ff; font-weight: bold">a</span><span style="color: #000000; text-decoration-color: #000000"> </span><span style="color: #808000; text-decoration-color: #808000">href</span><span style="color: #000000; text-decoration-color: #000000">=</span><span style="color: #008000; text-decoration-color: #008000">"https://eap.bl.uk/archive-file/EAP699-23-1"</span><span style="color: #000000; text-decoration-color: #000000">&gt;View the catalogue record&lt;</span><span style="color: #800080; text-decoration-color: #800080">/</span><span style="color: #ff00ff; text-decoration-color: #ff00ff">a</span><span style="font-weight: bold">&gt;</span>
+Citation: Photographs, British Library, EAP699/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">23</span>/<span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1</span>, <span style="color: #0000ff; text-decoration-color: #0000ff; text-decoration: underline">https://eap.bl.uk/archive-file/EAP699-23-1</span>
+Digitised by: Institute of the Cultural Heritage of the Academy of Sciences of Moldova
+Digitisation funded by: Endangered Archives Programme supported by Arcadia
+Language: Romanian, Russian
+Scripts: Cyrillic, Latin
+
+</pre>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;apjanco/fantastic-futures&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+      <span class="n">image</span><span class="o">=</span><span class="n">handle_file</span><span class="p">(</span><span class="n">image</span><span class="p">),</span>
+      <span class="n">model_id</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen3-VL-30B-A3B-Instruct&quot;</span><span class="p">,</span>
+      <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_metadata</span><span class="p">,</span>
+      <span class="n">api_name</span><span class="o">=</span><span class="s2">&quot;/run_example&quot;</span>
+  <span class="p">)</span>
+  <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loaded as API: https://apjanco-fantastic-futures.hf.space ✔
+(&#39;This is a vintage, sepia-toned portrait photograph, identified as &#39;
+ &#39;EAP699/23/1, originating from Moldova, Europe. The image captures a formal &#39;
+ &#39;family scene with three individuals: a man, a woman, and a young boy, &#39;
+ &#39;positioned side-by-side and looking towards the camera. The man, on the &#39;
+ &#39;left, is balding with a serious expression, wearing a dark collared shirt. &#39;
+ &#39;The young boy, in the center, has a solemn look and is dressed in a &#39;
+ &#39;textured, high-collared garment. The woman, on the right, has dark, styled &#39;
+ &#39;hair and offers a slight smile. The photograph is encased in a decorative &#39;
+ &#39;frame with a repeating geometric pattern and shows significant signs of age, &#39;
+ &#39;including creases, discoloration, and a prominent vertical light flare or &#39;
+ &#39;reflection across the center. The original caption indicates this is part of &#39;
+ &#39;a collection of photographs from Moldova, digitized by the Institute of the &#39;
+ &#39;Cultural Heritage of the Academy of Sciences of Moldova, with support from &#39;
+ &#39;the Endangered Archives Programme.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/1c1cbb89bfec9cd25ef61142a5df9b6c370f2108e0f70dadf672e55f7526a222.png" src="../_images/1c1cbb89bfec9cd25ef61142a5df9b6c370f2108e0f70dadf672e55f7526a222.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;This is a vintage, colorized group photograph, identified as EAP699/23/1, &#39;
+ &#39;originating from Moldova, Europe. The image, digitized by the Institute of &#39;
+ &#39;the Cultural Heritage of the Academy of Sciences of Moldova, captures a &#39;
+ &#39;large class or group of young people, likely students, arranged in several &#39;
+ &#39;rows. The photograph exhibits significant signs of age, including a &#39;
+ &#39;prominent crack running diagonally across the frame, yellowing of the paper, &#39;
+ &#39;and faded, warm-toned colors characteristic of older photographic prints.\n&#39;
+ &#39;\n&#39;
+ &#39;The subjects, a mix of young men and women, are dressed in the fashion &#39;
+ &#39;typical of the late 1970s or early 1980s. Their attire includes sweaters, &#39;
+ &#39;turtlenecks, and jackets. In the front row, a man with a mustache and a &#39;
+ &#39;patterned suit stands out, possibly a teacher or a senior figure. The group &#39;
+ &#39;is posed formally, with most individuals looking directly at the camera, &#39;
+ &#39;conveying a sense of a formal school or organizational portrait. The overall &#39;
+ &#39;atmosphere is one of nostalgia, preserved through this archival image.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/9c345eb2d9979c6647eaf1a19527b03efa4bda2be0e58551f993fecdbdb374d6.png" src="../_images/9c345eb2d9979c6647eaf1a19527b03efa4bda2be0e58551f993fecdbdb374d6.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;This is a vintage, colorized photograph, identified as EAP699/23/1, &#39;
+ &#39;originating from Moldova, Europe. The image shows a man and a woman posing &#39;
+ &#39;together outdoors, likely in a garden or park, with foliage visible in the &#39;
+ &#39;background. The photograph exhibits significant signs of age, including &#39;
+ &#39;discoloration, creases, and a yellowed, sepia-toned appearance, particularly &#39;
+ &#39;on the left side.\n&#39;
+ &#39;\n&#39;
+ &#39;The man, positioned on the left, has dark, wavy hair and a mustache. He is &#39;
+ &#39;wearing a light-colored, possibly yellow or beige, collared shirt with a &#39;
+ &#39;subtle checkered pattern over a lighter undershirt. He looks directly at the &#39;
+ &#39;camera with a neutral expression. The woman, on the right, wears a &#39;
+ &#39;light-colored headscarf with small, colorful floral patterns and a dark vest &#39;
+ &#39;with white horizontal stripes over a light-colored collared shirt. She has a &#39;
+ &#39;gentle smile and is also looking towards the camera. The overall composition &#39;
+ &#39;is a close-up portrait, capturing a moment of personal connection. The &#39;
+ &#39;photograph was digitized by the Institute of the Cultural Heritage of the &#39;
+ &#39;Academy of Sciences of Moldova and is part of the Endangered Archives &#39;
+ &#39;Programme, supported by Arcadia.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/bf3086e450787311fb4138d927d8104b04ede9600a97e8514c4d0f591617558d.png" src="../_images/bf3086e450787311fb4138d927d8104b04ede9600a97e8514c4d0f591617558d.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;This is a vintage, oval-shaped portrait photograph of a young man, likely &#39;
+ &#39;from Moldova, Europe. The image is framed by an ornate, decorative border &#39;
+ &#39;with a dark blue background. On the left side of the frame, there is a &#39;
+ &#39;floral motif featuring blue thistles and wheat stalks. On the right, there &#39;
+ &#39;is a branch with pink blossoms and two birds. The bottom of the frame &#39;
+ &#39;depicts a landscape scene with birch trees and a small house. The photograph &#39;
+ &#39;itself shows a young man with dark, wavy hair, wearing a dark suit, a white &#39;
+ &#39;shirt, and a patterned tie with yellow and dark tones. The overall image &#39;
+ &#39;shows signs of age, including creases, discoloration, and a slight &#39;
+ &#39;rainbow-like iridescence on the surface, suggesting it is a preserved &#39;
+ &#39;historical document.&#39;)
+</pre></div>
+</div>
+<img alt="../_images/07ec74dca7b6e42e4e87b98490309032547c48136f879a9da39204ee0ecb3b8c.png" src="../_images/07ec74dca7b6e42e4e87b98490309032547c48136f879a9da39204ee0ecb3b8c.png" />
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -394,6 +744,24 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">British Library’s Endangered Archives Programme</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-read-the-manifest">How to read the manifest</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-with-metadata">Processing with Metadata</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
