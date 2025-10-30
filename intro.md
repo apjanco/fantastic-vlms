@@ -1,11 +1,4 @@
-# Welcome to your Jupyter Book
+# Auto-Cataloging Research Materials from the Endangered Archives Programme
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+This is a site for the [Fantastic Futures](https://sites.google.com/view/ai4lam/fantastic-futures-2025) workshop held at the British Library in December 2025. The workshop focuses on using AI and machine learning techniques to automate the cataloging of research materials from the Endangered Archives Programme. The workshop is led by Andrew Janco, Ann Farnsworth-Alvear, Daniel Tubb, and Kelly López Roldán.  
 
-Check out the content pages bundled with this sample book to see more.
-
-```{tableofcontents}
-```

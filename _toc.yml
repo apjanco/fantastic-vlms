@@ -3,7 +3,16 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+parts:
+  - caption: Introduction and context
+    chapters:
+    - file: introduction/chapter1
+    - file: introduction/chapter2
+  - caption: Technical Demonstration
+    chapters:
+    - file: demonstration/chapter1
+    - file: demonstration/chapter2
+  - caption: Workshop Exercises
+    chapters:
+    - file: exercises/chapter1
+    - file: exercises/chapter2
