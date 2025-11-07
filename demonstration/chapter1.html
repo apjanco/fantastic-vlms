@@ -183,6 +183,9 @@
 
 <li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="chapter3.html">Processing Workflows</a></li>
+
+
+
 <li class="toctree-l1"><a class="reference internal" href="chapter4.html">Evaluation of Generated Research Data and Metadata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="chapter5.html">Outputs</a></li>
 </ul>
@@ -372,7 +375,7 @@ document.write(`
 </div></blockquote>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Manifest URL</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Manifest URL</span>
 <span class="n">manifest_url</span> <span class="o">=</span> <span class="s2">&quot;https://eap.bl.uk/archive-file/EAP699-23-1/manifest?manifest=https%3A//eap.bl.uk/archive-file/EAP699-23-1/manifest&quot;</span>
 </pre></div>
 </div>
@@ -380,7 +383,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Fetch the manifest from EAP</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Fetch the manifest from EAP</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">srsly</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
@@ -402,9 +405,9 @@ document.write(`
 </div>
 </div>
 </div>
-<div class="cell docutils container">
+<div class="cell tag_full-width docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">canvas</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;sequences&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;canvases&quot;</span><span class="p">]:</span>
   <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">canvas</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]:</span>
     <span class="n">image_uri</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resource&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;@id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -420,9 +423,11 @@ document.write(`
 </div>
 </div>
 </div>
+<p>What is contained in our images list? Let’s look at one of them using the index position in the list.</p>
+<p>Once displayed, copy the output and try loading it in the browser.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">images</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -435,23 +440,9 @@ document.write(`
 </div>
 </div>
 </div>
-<p>What is contained in our images list? Let’s look at one of them using the index position in the list.</p>
-<p>Once displayed, copy the output and try loading it in the browser.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/full/0/default.jpg&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 <span class="n">Image</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">images</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -459,9 +450,35 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output text_html"><img src="https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/full/0/default.jpg" width="400"/></div></div>
 </div>
+<p>Beyond serving images and metadata to the Web, the IIIF also allows for many transformations of the image just by changing the URL. You can request a black and white version, a cropped version, or a resized version. See the <a class="reference external" href="https://iiif.io/api/image/3.0/">IIIF Image API documentation</a> for more details.</p>
+<p>While the model that were using is able to process images of any size, larger images will use more memory. To reduce memory usage, we can request smaller versions of the images by changing the IIIF URL. Here, we will request images that are 400 pixels wide.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">resize_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">new_width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">new_height</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="c1">#{scheme}://{server}{/prefix}/{identifier}/{region}/{size}/{rotation}/{quality}.{format}</span>
+  <span class="c1"># https://iiif.io/api/image/3.0/#21-image-request-uri-syntax</span>
+  <span class="n">size</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+  <span class="n">region</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+  <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">/&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">new_width</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">new_height</span><span class="si">}</span><span class="s1">/&#39;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">image_url</span>
+
+<span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
+<span class="n">images</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/1.jp2/full/400,/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/2.jp2/full/400,/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/3.jp2/full/400,/0/default.jpg&#39;,
+ &#39;https://images.eap.bl.uk/EAP699/EAP699_23_1/4.jp2/full/400,/0/default.jpg&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
 <span class="c1"># @title Prompt</span>
 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the image for use as alt-text.&quot;&quot;&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
@@ -475,7 +492,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gradio_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">handle_file</span>
 
@@ -552,7 +569,7 @@ document.write(`
 <p>On its own the model gives relatively generic and unhelpful descriptions. However, we can use the metadata from the EAP when generating the description.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
 <span class="c1"># @title Initial Prompt</span>
 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the contents of the image.&quot;&quot;&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
@@ -566,7 +583,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Prompt + Metadata</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Prompt + Metadata</span>
 
 <span class="n">prompt</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Use the following metadata as context: </span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="n">manifest</span> <span class="o">=</span> <span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;manifest.json&#39;</span><span class="p">)</span>
@@ -594,7 +611,7 @@ Scripts: Cyrillic, Latin
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;apjanco/fantastic-futures&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;apjanco/fantastic-futures&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
   <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
   <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
