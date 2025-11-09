@@ -1,6 +1,9 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
+# run build: jupyter-book build . --all
+# to push the built site to gh-pages: ghp-import -n -p -f _build/html
+
 title: Fantastic Futures -- Auto-cataloguing Workshop
 author: Andrew Janco, Ann Farnsworth-Alvear, Daniel Tubb, Kelly López Roldán 
 copyright: "2025"
