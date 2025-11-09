@@ -319,7 +319,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -335,6 +337,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-tags">Code tags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-hiccups">Remove ‘hiccups’</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation">Evaluation</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -346,10 +358,88 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="evaluation-of-generated-research-data-and-metadata">
 <h1>Evaluation of Generated Research Data and Metadata<a class="headerlink" href="#evaluation-of-generated-research-data-and-metadata" title="Link to this heading">#</a></h1>
-<p>Evaluation. Testing and evaluating the quality of generated data. Metadata standards, schema, interoperability
-Remove ‘hiccups’
-Remove code tags (three backs)
-Remove “chatter: ” ‘Of course. Here is a detailed description of the image provided.\n’</p>
+<p>Generative AI models are prone to “hallucination” where they add unwanted text or information. They can also be very “chatty”, adding unnecessary filler words or phrases that do not contribute to the content.</p>
+<p>In this section, we will review the results and remove unwanted AI detritus.
+Evaluation. Testing and evaluating the quality of generated data. Metadata standards, schema, interoperability</p>
+<section id="code-tags">
+<h2>Code tags<a class="headerlink" href="#code-tags" title="Link to this heading">#</a></h2>
+<p>AI models often add code tags (```) around code snippets. These should be removed for cleaner presentation.</p>
+<p>a common pattern is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```yaml
+# some text here
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_code_tags</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove code tags (triple backticks) from the text. Also remove tags with language specifiers such as ```yaml.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;```[a-zA-Z]*\n(.*?)\n```&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">remove_code_tags</span><span class="p">(</span><span class="s2">&quot;Here is some code:</span><span class="se">\n</span><span class="s2">```python</span><span class="se">\n</span><span class="s2">print(&#39;Hello, World!&#39;)</span><span class="se">\n</span><span class="s2">```&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Here is some code:
+print(&#39;Hello, World!&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="remove-hiccups">
+<h2>Remove ‘hiccups’<a class="headerlink" href="#remove-hiccups" title="Link to this heading">#</a></h2>
+<p>Another common issue with LLMs is repeated text or ‘hiccups’ in the output. For example, a model might repeat a phrase or sentence multiple times unnecessarily. This is usually because the model was told to generate a certain length of text and it fills in the space with repeated content.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_repeated_phrases</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove repeated phrases in the text.&quot;&quot;&quot;</span>
+    <span class="c1"># This regex looks for any phrase (sequence of words) that is repeated consecutively</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(\b\w+(?: \w+){0,5}\b)( \1)+&quot;</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">remove_repeated_phrases</span><span class="p">(</span>
+        <span class="s2">&quot;This is a test test test of the function function function.&quot;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>This is a test of the function.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a cell that reads the output json file(s) and cleans them </span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluation">
+<h2>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Test against human benchmark </span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">srsly</span> 
+<span class="n">evaluation_data</span> <span class="o">=</span> <span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s2">&quot;fmb_evaluation_data.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -406,6 +496,23 @@ Remove “chatter: ” ‘Of course. Here is a detailed description of the image
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-tags">Code tags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-hiccups">Remove ‘hiccups’</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation">Evaluation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -383,7 +383,7 @@ document.write(`
 </div></blockquote>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Manifest URL</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Manifest URL</span>
 <span class="n">manifest_url</span> <span class="o">=</span> <span class="s2">&quot;https://eap.bl.uk/archive-file/EAP699-23-1/manifest?manifest=https%3A//eap.bl.uk/archive-file/EAP699-23-1/manifest&quot;</span>
 </pre></div>
 </div>
@@ -403,9 +403,9 @@ document.write(`
 <span class="p">}</span>
 <span class="n">manifest</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">manifest_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-  <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error downloading manifest: </span><span class="si">{</span><span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error downloading manifest: </span><span class="si">{</span><span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="n">srsly</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span><span class="s1">&#39;manifest.json&#39;</span><span class="p">,</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="n">srsly</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span><span class="s2">&quot;manifest.json&quot;</span><span class="p">,</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 <span class="c1"># &lt;-- In the files area to the left, you should now have a manifest.json file. Click on it to see the data.</span>
 
 <span class="n">manifest</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
@@ -417,18 +417,19 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">canvas</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;sequences&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;canvases&quot;</span><span class="p">]:</span>
-  <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">canvas</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]:</span>
-    <span class="n">image_uri</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resource&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;@id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">image_uri</span><span class="p">:</span>
-      <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_uri</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">canvas</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]:</span>
+        <span class="n">image_uri</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resource&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image_uri</span><span class="p">:</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_uri</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> images in manifest&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Found <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span> images in manifest
-</pre>
-</div></div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 4 images in manifest
+</pre></div>
+</div>
+</div>
 </div>
 <p>What is contained in our images list? Let’s look at one of them using the index position in the list.</p>
 <p>Once displayed, copy the output and try loading it in the browser.</p>
@@ -450,6 +451,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
 <span class="n">Image</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">images</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -461,13 +463,16 @@ document.write(`
 <p>While the model that were using is able to process images of any size, larger images will use more memory. To reduce memory usage, we can request smaller versions of the images by changing the IIIF URL. Here, we will request images that are 400 pixels wide.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">resize_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">new_width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">new_height</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-  <span class="c1">#{scheme}://{server}{/prefix}/{identifier}/{region}/{size}/{rotation}/{quality}.{format}</span>
-  <span class="c1"># https://iiif.io/api/image/3.0/#21-image-request-uri-syntax</span>
-  <span class="n">size</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
-  <span class="n">region</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
-  <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">/&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">new_width</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">new_height</span><span class="si">}</span><span class="s1">/&#39;</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">image_url</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">resize_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">new_width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">new_height</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="c1"># {scheme}://{server}{/prefix}/{identifier}/{region}/{size}/{rotation}/{quality}.{format}</span>
+    <span class="c1"># https://iiif.io/api/image/3.0/#21-image-request-uri-syntax</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">new_width</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">new_height</span><span class="si">}</span><span class="s2">/&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">image_url</span>
+
 
 <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
 <span class="n">images</span>
@@ -489,6 +494,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+
 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the image for use as alt-text.&quot;&quot;&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
 </pre></div>
@@ -516,57 +522,50 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip install openai </span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip install openai</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">process_image_urls</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">image_urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-	
-	<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
-		<span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">,</span>
-		<span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
-	<span class="p">)</span>
-	<span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-	<span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_urls</span><span class="p">:</span>
-		<span class="n">chat_completion</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-			<span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;Qwen/Qwen3-VL-8B-Instruct&quot;</span><span class="p">,</span>
-			<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-				<span class="p">{</span>
-					<span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
-					<span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
-						<span class="p">{</span>
-							<span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span>
-							<span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span>
-								<span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image</span>
-							<span class="p">}</span>
-						<span class="p">},</span>
-						<span class="p">{</span>
-							<span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-							<span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span>
-						<span class="p">}</span>
-					<span class="p">]</span>
-				<span class="p">}</span>
-			<span class="p">],</span>
-			<span class="n">stream</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-			<span class="n">temperature</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-			<span class="c1">#max_tokens = 100</span>
-		<span class="p">)</span>
 
-		<span class="n">response_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-		<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chat_completion</span><span class="p">:</span>
-			<span class="n">token</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-			<span class="k">if</span> <span class="n">token</span><span class="p">:</span>
-				<span class="n">response_text</span> <span class="o">+=</span> <span class="n">token</span>
-		<span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response_text</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">output</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_image_urls</span><span class="p">(</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">image_urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+    <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_urls</span><span class="p">:</span>
+        <span class="n">chat_completion</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen3-VL-8B-Instruct&quot;</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">}},</span>
+                        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+                    <span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+            <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">temperature</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="c1"># max_tokens = 100</span>
+        <span class="p">)</span>
+
+        <span class="n">response_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chat_completion</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delta</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">token</span><span class="p">:</span>
+                <span class="n">response_text</span> <span class="o">+=</span> <span class="n">token</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
+
 
 <span class="n">predictions</span> <span class="o">=</span> <span class="n">process_image_urls</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">predictions</span><span class="p">):</span>
-	<span class="k">if</span> <span class="n">image</span> <span class="ow">and</span> <span class="n">prediction</span><span class="p">:</span>
-		<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
-		<span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-		<span class="nb">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image</span> <span class="ow">and</span> <span class="n">prediction</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -607,6 +606,7 @@ yellowing, creases, and some discoloration along the edges, suggesting it is an 
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
+
 <span class="c1"># @title Initial Prompt</span>
 <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the contents of the image.&quot;&quot;&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
@@ -623,9 +623,9 @@ yellowing, creases, and some discoloration along the edges, suggesting it is an 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># @title Prompt + Metadata</span>
 
 <span class="n">prompt</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\n</span><span class="s2">Use the following metadata as context: </span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="n">manifest</span> <span class="o">=</span> <span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;manifest.json&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]:</span>
-  <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="n">manifest</span> <span class="o">=</span> <span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s2">&quot;manifest.json&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]:</span>
+    <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -650,10 +650,10 @@ Scripts: Cyrillic, Latin
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">predictions</span> <span class="o">=</span> <span class="n">process_image_urls</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">predictions</span><span class="p">):</span>
-	<span class="k">if</span> <span class="n">image</span> <span class="ow">and</span> <span class="n">prediction</span><span class="p">:</span>
-		<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
-		<span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-		<span class="nb">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">image</span> <span class="ow">and</span> <span class="n">prediction</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
