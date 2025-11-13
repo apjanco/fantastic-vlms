@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9e498a27" />
@@ -182,9 +182,10 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Fetching Manifests and Images from the Endangered Archives Programme</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="chapter3.html">Processing Workflows</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="chapter3.html">Processing Workflows</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="chapter4.html">Evaluation of Generated Research Data and Metadata</a></li>
@@ -342,12 +343,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fetching Manifests and Images from the Endangered Archives Programme</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt">Prompt</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fetching Manifests and Images from the Endangered Archives Programme</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt">Prompt</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#endpoint-approach">Endpoint approach</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint">Model Endpoint</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-with-metadata">Processing with Metadata</a></li>
@@ -488,8 +487,9 @@ document.write(`
 </div>
 </div>
 </div>
-<section id="prompt">
-<h2>Prompt<a class="headerlink" href="#prompt" title="Link to this heading">#</a></h2>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="prompt">
+<h1>Prompt<a class="headerlink" href="#prompt" title="Link to this heading">#</a></h1>
 <p>The prompt contains your instructions to the model. You can modify this to change the behavior of the model.For now, we’ll keep it simple and generate alt-text descriptions for each image.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -506,16 +506,23 @@ document.write(`
 </div></div>
 </div>
 </section>
-</section>
 <section class="tex2jax_ignore mathjax_ignore" id="models">
 <h1>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h1>
-<section id="endpoint-approach">
-<h2>Endpoint approach<a class="headerlink" href="#endpoint-approach" title="Link to this heading">#</a></h2>
-<p>There are many models and many ways to run them. For this workshop, we’ll provide you with an endpoint to access a model using a REST API. This allows you to use the model without needing a GPU. At the end, we’ll give you instruction on how to create your own endpoint if this approach is best for you. Our code works with most other model endpoint providers such as OpenAI, Anthropic and others. We’re model agnostic, so you can choose the model that works best for you as things change rapidly in this space.</p>
+<section id="model-endpoint">
+<h2>Model Endpoint<a class="headerlink" href="#model-endpoint" title="Link to this heading">#</a></h2>
+<p>There are many models and many ways to run them. For this workshop, we’ll provide you with an endpoint to access a model using a REST API. Similarly to how a web browser sends requests to a server to get and display a webpage, we’ll send requests over the Internet to a server that’s running the model. It will send the model’s response back to us.</p>
+<p>This approach allows you to use an AI model without needing any special hardware. At the end, we’ll give you instruction on how to create your own endpoint if this approach is best for you. Our code works with most other model endpoint providers such as OpenAI or Anthropic. We’re model agnostic, so you can choose the model that works best for you as things change rapidly in this space.</p>
+<p>For example, if you’d like to use Alibaba’s servers, you just need to change the base_url and enter an API key. Here are <a class="reference external" href="https://www.alibabacloud.com/help/en/model-studio/get-api-key">instructions</a> on how to get an Alibaba key. There are many endpoint providers. <a class="reference external" href="https://openrouter.ai/qwen/qwen3-vl-8b-instruct">OpenRouter</a> is a useful directory with cost comparisons. It is, of course, also possible to run models on your own hardware.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://dashscope-intl.aliyuncs.com/compatible-mode/v1&quot;</span>
+<span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;sk-...&quot;</span>
+<span class="n">model</span><span class="o">=</span><span class="s2">&quot;qwen2.5-vl-7b-instruct&quot;</span>
+</pre></div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://glw30r2npdvyvzho.us-east-1.aws.endpoints.huggingface.cloud/v1/&quot;</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;$HF_TOKEN&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://api.parasail.io/v1&quot;</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;psk-...&quot;</span> <span class="c1"># We will share this key with you during the workshop</span>
+<span class="n">model</span><span class="o">=</span><span class="s2">&quot;discircjipof-fantastic-futures&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -536,7 +543,7 @@ document.write(`
     <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_urls</span><span class="p">:</span>
         <span class="n">chat_completion</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;Qwen/Qwen3-VL-8B-Instruct&quot;</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="c1">#&quot;Qwen/Qwen3-VL-8B-Instruct&quot;,</span>
             <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
@@ -811,12 +818,10 @@ style and cultural context of Moldova during the period.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fetching Manifests and Images from the Endangered Archives Programme</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt">Prompt</a></li>
-</ul>
-</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fetching Manifests and Images from the Endangered Archives Programme</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt">Prompt</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#endpoint-approach">Endpoint approach</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint">Model Endpoint</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#processing-with-metadata">Processing with Metadata</a></li>

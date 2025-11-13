@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9e498a27" />
@@ -182,9 +182,10 @@
 <li class="toctree-l1"><a class="reference internal" href="chapter1.html">Fetching Manifests and Images from the Endangered Archives Programme</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing Workflows</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Processing Workflows</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="chapter4.html">Evaluation of Generated Research Data and Metadata</a></li>
@@ -342,9 +343,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing Workflows</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#select-model">Select Model</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langchain">Langchain</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing Workflows</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-requests">Web Requests</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-requirements">Workflow Requirements</a></li>
@@ -369,53 +369,137 @@ document.write(`
 <p>While the descriptions from the first notebook are nice, they’re not research data or archival metadata.</p>
 <p>This next section details a workflow that will process your materials into a structured format that can be used for research or library systems. This is an example that can be adapted to your specific needs.</p>
 <p><a class="reference external" href="https://colab.research.google.com/drive/1-wksvuqBUv8qq2mLJ8EbbluStjyvXIp7#scrollTo=OsonjvCPSjIr"><img alt="" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="select-model">
-<h1>Select Model<a class="headerlink" href="#select-model" title="Link to this heading">#</a></h1>
-<p>There are many open-source models for OCR or HTR available. The Qwen family (q-when) of models has led the way as a tool to extract handwritten text. There are many models adapted from <a class="reference external" href="https://huggingface.co/Qwen">Qwen</a>, such as the <a class="reference external" href="https://huggingface.co/nanonets/Nanonets-OCR-s">Nanonets OCR model</a>, which preserves structured information like tables or forms.</p>
-<p>For this workshop, we’ll be using the newest model “Qwen/Qwen3-VL-8B-Instruct”</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;Qwen/Qwen3-VL-8B-Instruct&quot;</span>
-<span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://glw30r2npdvyvzho.us-east-1.aws.endpoints.huggingface.cloud/v1/&quot;</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;not needed for this workshop!&quot;</span>  <span class="c1"># But you might need one for your own projects</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="langchain">
-<h2>Langchain<a class="headerlink" href="#langchain" title="Link to this heading">#</a></h2>
+<section id="web-requests">
+<h2>Web Requests<a class="headerlink" href="#web-requests" title="Link to this heading">#</a></h2>
+<p>When using a web browser, we enter an address (URL) and the browser makes a request to the server hosting that resource. The server then responds with the requested resource, such as a web page, image, or document. The same process can be done programmatically using libraries like requests or httpx in Python. This allows us to automate the retrieval of resources from the web.</p>
+<p>There are several types of HTTP requests, but the most common are:</p>
 <ul class="simple">
-<li><p>why we’re using it, what it does</p></li>
-<li><p>how the code is slightly different</p></li>
+<li><p>GET: Retrieve data from a server (e.g., fetching a web page or image).</p></li>
+<li><p>POST: Send data to a server (e.g., submitting a form or uploading a file).</p></li>
 </ul>
+<p>When talking with our AI model, we are making a POST request. Our request includes:</p>
+<ul class="simple">
+<li><p>The URL of the API endpoint we are sending the request to.</p></li>
+<li><p>Headers that provide additional information about the request, such as authentication tokens and content type.</p></li>
+<li><p>Message body that contains the data we want to send to the server in a format that the model can understand.</p></li>
+</ul>
+<p>In the cell below, we create a function (a reusable block of code) to make a request to the model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
-
-<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
-<span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="s2">&quot;hi!&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://api.parasail.io/v1&quot;</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;psk-...&quot;</span>  <span class="c1"># We will share this key with you during the workshop</span>
+<span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;discircjipof-fantastic-futures&quot;</span>  <span class="c1"># Qwen3-VL-8B-Instruct</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AIMessage(content=&#39;Hi! 😊 How can I help you today?&#39;, additional_kwargs={&#39;refusal&#39;: None}, response_metadata={&#39;token_usage&#39;: {&#39;completion_tokens&#39;: 12, &#39;prompt_tokens&#39;: 10, &#39;total_tokens&#39;: 22, &#39;completion_tokens_details&#39;: None, &#39;prompt_tokens_details&#39;: None}, &#39;model_provider&#39;: &#39;openai&#39;, &#39;model_name&#39;: &#39;Qwen/Qwen3-VL-8B-Instruct&#39;, &#39;system_fingerprint&#39;: None, &#39;id&#39;: &#39;chatcmpl-nrrFuS&#39;, &#39;finish_reason&#39;: &#39;stop&#39;, &#39;logprobs&#39;: None}, id=&#39;lc_run--fa0dd497-a08b-44d2-a9f0-de24313cdb7a-0&#39;, usage_metadata={&#39;input_tokens&#39;: 10, &#39;output_tokens&#39;: 12, &#39;total_tokens&#39;: 22, &#39;input_token_details&#39;: {}, &#39;output_token_details&#39;: {}})
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_model</span><span class="p">(</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="c1">#your API key</span>
+    <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="c1">#API base URL</span>
+    <span class="n">img</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="c1">#base64 encoded image or image URL</span>
+    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="c1">#text prompt</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">model</span> <span class="c1">#model name</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/chat/completions&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;content-type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+        <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">img</span><span class="p">}},</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">},</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error decoding JSON response&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Failed to decode JSON response&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">response_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;choices&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">response_data</span><span class="p">[</span><span class="s2">&quot;choices&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;message&quot;</span><span class="p">][</span><span class="s2">&quot;content&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: No choices in response&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;No choices in response&quot;</span><span class="p">}</span>
+    <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">RequestError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Request error:&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>    
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a HumanMessage with content and image attribute</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">HumanMessageWithImage</span><span class="p">(</span><span class="n">HumanMessage</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image_url</span><span class="p">)</span>
+    <span class="c1"># print(f&quot;Fetching image from {image_url}, status code: {response.status_code}&quot;)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">image_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span>
+
+        <span class="c1"># Convert image data to PIL Image</span>
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">image_data</span><span class="p">))</span>
+
+        <span class="c1"># Convert pil Image to base64 data URI</span>
+        <span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+        <span class="n">pil_img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;PNG&quot;</span><span class="p">)</span>
+        <span class="n">encoded_string</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;data:image/png;base64,</span><span class="si">{</span><span class="n">encoded_string</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">resize_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">new_width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">new_height</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="c1"># {scheme}://{server}{/prefix}/{identifier}/{region}/{size}/{rotation}/{quality}.{format}</span>
+    <span class="c1"># https://iiif.io/api/image/3.0/#21-image-request-uri-syntax</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">image_url</span> <span class="o">=</span> <span class="n">image_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">new_width</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">new_height</span><span class="si">}</span><span class="s2">/&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">image_url</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span>
+    <span class="s2">&quot;https://images.eap.bl.uk/EAP699/EAP699_23_1/1.jp2/full/full/0/default.jpg&quot;</span>
+<span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">call_model</span><span class="p">(</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+    <span class="n">img</span><span class="o">=</span><span class="n">img</span><span class="p">,</span>
+    <span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Describe the image above in a single sentence.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -439,14 +523,14 @@ document.write(`
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">IPythonImage</span>
 
-<span class="n">display</span><span class="p">(</span><span class="n">Image</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">get_graph</span><span class="p">()</span><span class="o">.</span><span class="n">draw_mermaid_png</span><span class="p">()))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">IPythonImage</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">get_graph</span><span class="p">()</span><span class="o">.</span><span class="n">draw_mermaid_png</span><span class="p">()))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/06c07cbd9344beca8853a2471f8612561dba0d7bad003b64afe5ce98f160e3c3.png" src="../_images/06c07cbd9344beca8853a2471f8612561dba0d7bad003b64afe5ce98f160e3c3.png" />
+<img alt="../_images/57b421645cb82cf42ae9c7ab39969d6e1a9374844e3a5b132b9d2bb2fb4d4539.png" src="../_images/57b421645cb82cf42ae9c7ab39969d6e1a9374844e3a5b132b9d2bb2fb4d4539.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -461,26 +545,33 @@ document.write(`
     <span class="n">box_manifest_data</span><span class="p">:</span> <span class="nb">dict</span>
     <span class="n">box_metadata</span><span class="p">:</span> <span class="nb">dict</span>
     <span class="n">box_summary</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">people</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">places</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">organizations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">image_urls</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">image_height</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">image_width</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">images</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span>
     <span class="n">item_grouping</span><span class="p">:</span> <span class="nb">list</span>
     <span class="n">items</span><span class="p">:</span> <span class="nb">dict</span>
-    <span class="n">sample</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Process only first n images in the box</span>
+    <span class="n">image_descriptions</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">start_index</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Start processing from this image index</span>
+    <span class="n">end_index</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># End processing at this image index</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">streamlit</span><span class="w"> </span><span class="kn">import</span> <span class="n">image</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typer</span><span class="w"> </span><span class="kn">import</span> <span class="n">prompt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
+
+<span class="c1"># https://docs.langchain.com/oss/python/langgraph/workflows-agents</span>
 
 
 <span class="c1"># Nodes</span>
@@ -491,7 +582,8 @@ document.write(`
     <span class="n">manifest</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">],</span> <span class="n">headers</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error downloading manifest: </span><span class="si">{</span><span class="n">manifest</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetched manifest successfully!&quot;</span><span class="p">)</span>
+    <span class="n">manifest_id</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Successfully fetched manifest for </span><span class="si">{</span><span class="n">manifest_id</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;box_manifest_data&quot;</span><span class="p">:</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">()}</span>
 
 
@@ -502,41 +594,61 @@ document.write(`
             <span class="n">image_uri</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resource&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;@id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">image_uri</span><span class="p">:</span>
                 <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_uri</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_index&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;start_index&quot;</span><span class="p">]</span> <span class="p">:]</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_index&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="p">[:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;end_index&quot;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_index&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end_index&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;start_index&quot;</span><span class="p">]</span> <span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;end_index&quot;</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_height&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_width&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">resize_image</span><span class="p">(</span>
+                <span class="n">image</span><span class="p">,</span>
+                <span class="n">new_width</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;image_width&quot;</span><span class="p">],</span>
+                <span class="n">new_height</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;image_height&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span>
+        <span class="p">]</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_height&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">new_height</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;image_height&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span>
+        <span class="p">]</span>
+    <span class="k">elif</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;image_width&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">resize_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">new_width</span><span class="o">=</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;image_width&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span>
+        <span class="p">]</span>
+
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;box_manifest_data&quot;</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">]:</span>
         <span class="n">metadata</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> images in manifest!!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="si">}</span><span class="s2"> images in manifest&quot;</span><span class="p">)</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">],</span>
         <span class="s2">&quot;box_manifest_data&quot;</span><span class="p">:</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;box_manifest_data&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;image_urls&quot;</span><span class="p">:</span> <span class="n">images</span><span class="p">,</span>
+        <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="n">images</span><span class="p">,</span>
         <span class="s2">&quot;box_metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
     <span class="p">}</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">add_image_descriptions</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
-    <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;image_urls&quot;</span><span class="p">]]</span>
-    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Adding descriptions to images&quot;</span><span class="p">):</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Describe the image for use as alt-text.</span><span class="se">\n</span><span class="s2">Use the following metadata as context: </span><span class="se">\n</span><span class="s2">&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;box_metadata&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="n">HumanMessageWithImage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">])</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">msg</span><span class="p">])</span>
-        <span class="n">image</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">content</span>
-    <span class="n">state</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">images</span>
-    <span class="k">return</span> <span class="n">state</span>
-
-
 <span class="k">def</span><span class="w"> </span><span class="nf">text_recognition</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract text from images using OCR.&quot;&quot;&quot;</span>
-    <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="n">images</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Extracting text from images&quot;</span><span class="p">):</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;If printed or handwritten text is present in the image, extract text from the page. Do not add any text that isn&#39;t present in the image. Preserve reading order. Retain formatting as markdown.&quot;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="n">HumanMessageWithImage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span> <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">])</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">msg</span><span class="p">])</span>
-        <span class="n">image</span><span class="p">[</span><span class="s2">&quot;markdown_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">content</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">image</span><span class="p">[</span><span class="s2">&quot;markdown_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Error loading image.&quot;</span>
+            <span class="k">continue</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">call_model</span><span class="p">(</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+            <span class="n">img</span><span class="o">=</span><span class="n">img</span><span class="p">,</span>
+            <span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Extract and return all the text from this image as markdown. Include all text elements and maintain the reading order.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">image</span><span class="p">[</span><span class="s2">&quot;markdown_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span>
+
     <span class="n">state</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">images</span>
     <span class="k">return</span> <span class="n">state</span>
 
@@ -550,7 +662,8 @@ document.write(`
         <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
     <span class="n">prompt</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Here are the image descriptions and text:</span><span class="se">\n\n</span><span class="s2">&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
-        <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;image </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&gt;description: </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">; text </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;markdown_text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/image </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;image </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&gt;text </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;markdown_text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/image </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invoking LLM for item grouping...&quot;</span><span class="p">)</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">prompt</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">([</span><span class="n">msg</span><span class="p">])</span>
     <span class="c1"># convert result content to dict</span>
@@ -562,16 +675,17 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">process_items</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">Box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Box</span><span class="p">:</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">)</span>
     <span class="n">item_grouping</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;item_grouping&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;items&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="n">images</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">]</span>
     <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">item_grouping</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">item_grouping</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing items&quot;</span><span class="p">):</span>
         <span class="c1"># pool text from images in the item</span>
         <span class="n">item_texts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
             <span class="n">item_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&lt;image </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&gt;description: </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">; text </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;markdown_text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/image </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;image </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&gt;text </span><span class="si">{</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;markdown_text&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/image </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
             <span class="p">)</span>
 
         <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Your are an archival processing assistant. You are given the text or description from one or more images in an item. Provide an item-level description. Be sure to record entities, such as people, places and organizations, with context as yaml frontmatter.&quot;&quot;&quot;</span>
@@ -584,6 +698,7 @@ document.write(`
                 <span class="s2">&quot;item_texts&quot;</span><span class="p">:</span> <span class="n">item_texts</span><span class="p">,</span>
                 <span class="s2">&quot;item_description&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
                 <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="n">group</span><span class="p">,</span>
+                <span class="s2">&quot;image_uris&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;image_url&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">group</span><span class="p">],</span>
             <span class="p">}</span>
         <span class="p">)</span>
     <span class="n">state</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span>
@@ -597,9 +712,13 @@ document.write(`
         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">box_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># if not output directory, create it</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output/</span><span class="si">{</span><span class="n">box_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved processed state to </span><span class="si">{</span><span class="n">box_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved processed state to output/</span><span class="si">{</span><span class="n">box_id</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">state</span>
 </pre></div>
 </div>
@@ -609,12 +728,12 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langgraph.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateGraph</span><span class="p">,</span> <span class="n">START</span><span class="p">,</span> <span class="n">END</span>
 
+
 <span class="c1"># Build workflow</span>
 <span class="n">builder</span> <span class="o">=</span> <span class="n">StateGraph</span><span class="p">(</span><span class="n">Box</span><span class="p">)</span>
 <span class="c1"># Add nodes</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;fetch_manifest&quot;</span><span class="p">,</span> <span class="n">fetch_manifest</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;read_manifest&quot;</span><span class="p">,</span> <span class="n">read_manifest</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;add_image_descriptions&quot;</span><span class="p">,</span> <span class="n">add_image_descriptions</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;text_recognition&quot;</span><span class="p">,</span> <span class="n">text_recognition</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;item_prediction&quot;</span><span class="p">,</span> <span class="n">item_prediction</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s2">&quot;process_items&quot;</span><span class="p">,</span> <span class="n">process_items</span><span class="p">)</span>
@@ -623,8 +742,7 @@ document.write(`
 <span class="c1"># Add edges to connect nodes</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">START</span><span class="p">,</span> <span class="s2">&quot;fetch_manifest&quot;</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;fetch_manifest&quot;</span><span class="p">,</span> <span class="s2">&quot;read_manifest&quot;</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;read_manifest&quot;</span><span class="p">,</span> <span class="s2">&quot;add_image_descriptions&quot;</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;add_image_descriptions&quot;</span><span class="p">,</span> <span class="s2">&quot;text_recognition&quot;</span><span class="p">)</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;read_manifest&quot;</span><span class="p">,</span> <span class="s2">&quot;text_recognition&quot;</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;text_recognition&quot;</span><span class="p">,</span> <span class="s2">&quot;item_prediction&quot;</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;item_prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;process_items&quot;</span><span class="p">)</span>
 <span class="n">builder</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s2">&quot;process_items&quot;</span><span class="p">,</span> <span class="s2">&quot;save_state&quot;</span><span class="p">)</span>
@@ -641,23 +759,27 @@ document.write(`
 
 <span class="n">output</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;https://eap.bl.uk/archive-file/EAP699-23-1/manifest?manifest=https%3A//eap.bl.uk/archive-file/EAP699-23-1/manifest&quot;</span>
+        <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;https://eap.bl.uk/archive-file/EAP699-23-1/manifest?manifest=https%3A//eap.bl.uk/archive-file/EAP699-23-1/manifest&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;end_index&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># process no more than 10 images</span>
     <span class="p">}</span>
 <span class="p">)</span>
-<span class="c1"># TODO add start, end index for images in box</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Fetched manifest successfully!
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">Successfully fetched manifest for Photographs</span>
 </pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Found <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span> images in manifest!!
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Found <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">4</span> images in manifest
 </pre>
-</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Adding descriptions to images: 100%|██████████| 4/4 [00:06&lt;00:00,  1.64s/it]
-Extracting text from images: 100%|██████████| 4/4 [00:00&lt;00:00,  4.95it/s]
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting text from images: 100%|██████████| 4/4 [00:10&lt;00:00,  2.58s/it]
 </pre></div>
 </div>
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Saved processed state to EAP699_23_1.json
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Invoking LLM for item grouping<span style="color: #808000; text-decoration-color: #808000">...</span>
+</pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Processing items: 100%|██████████| 1/1 [00:03&lt;00:00,  3.32s/it]
+</pre></div>
+</div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Saved processed state to output/EAP699_23_1.json
 </pre>
 </div></div>
 </div>
@@ -673,43 +795,23 @@ Extracting text from images: 100%|██████████| 4/4 [00:00&lt;
 <div class="cell_output docutils container">
 <div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">```yaml
 ---
-title: <span style="color: #008000; text-decoration-color: #008000">"Photographs Documenting Life and Culture in Moldova"</span>
-description: <span style="color: #008000; text-decoration-color: #008000">"A collection of archival photographs capturing scenes and individuals from Romanian- and </span>
-<span style="color: #008000; text-decoration-color: #008000">Russian-speaking communities in Moldova, Europe. The images reflect the region’s linguistic and cultural diversity,</span>
-<span style="color: #008000; text-decoration-color: #008000">featuring text in both Cyrillic and Latin scripts. Digitised by the Institute of the Cultural Heritage of the </span>
-<span style="color: #008000; text-decoration-color: #008000">Academy of Sciences of Moldova as part of the Endangered Archives Programme, funded by Arcadia. These materials </span>
-<span style="color: #008000; text-decoration-color: #008000">offer a visual record of daily life, traditions, and historical moments across Moldova."</span>
-date: <span style="color: #008000; text-decoration-color: #008000">"Unknown (digitised as part of EAP699/23/1)"</span>
-location: <span style="color: #008000; text-decoration-color: #008000">"Moldova, Europe"</span>
-language: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">"Romanian"</span>, <span style="color: #008000; text-decoration-color: #008000">"Russian"</span>, <span style="color: #008000; text-decoration-color: #008000">"Cyrillic script"</span>, <span style="color: #008000; text-decoration-color: #008000">"Latin script"</span><span style="font-weight: bold">]</span>
+title: <span style="color: #008000; text-decoration-color: #008000">"Item with No Text Content"</span>
+description: <span style="color: #008000; text-decoration-color: #008000">"This item consists of four images, none of which contain any textual content. The images appear to be</span>
+<span style="color: #008000; text-decoration-color: #008000">blank or devoid of written information, potentially representing visual media such as photographs, diagrams, or </span>
+<span style="color: #008000; text-decoration-color: #008000">scanned pages with no text."</span>
 entities:
-  - type: organization
-    name: <span style="color: #008000; text-decoration-color: #008000">"Institute of the Cultural Heritage of the Academy of Sciences of Moldova"</span>
-    role: <span style="color: #008000; text-decoration-color: #008000">"Digitising institution"</span>
-  - type: program
-    name: <span style="color: #008000; text-decoration-color: #008000">"Endangered Archives Programme"</span>
-    role: <span style="color: #008000; text-decoration-color: #008000">"Funding and digitisation initiative"</span>
-  - type: funder
-    name: <span style="color: #008000; text-decoration-color: #008000">"Arcadia"</span>
-    role: <span style="color: #008000; text-decoration-color: #008000">"Funding body"</span>
-  - type: repository
-    name: <span style="color: #008000; text-decoration-color: #008000">"British Library"</span>
-    role: <span style="color: #008000; text-decoration-color: #008000">"Hosting institution for EAP699/23/1"</span>
-  - type: region
-    name: <span style="color: #008000; text-decoration-color: #008000">"Moldova"</span>
-    description: <span style="color: #008000; text-decoration-color: #008000">"Eastern European country with significant Romanian and Russian-speaking populations"</span>
-  - type: language
-    name: <span style="color: #008000; text-decoration-color: #008000">"Romanian"</span>
-    context: <span style="color: #008000; text-decoration-color: #008000">"Official language of Moldova; appears in Latin script"</span>
-  - type: language
-    name: <span style="color: #008000; text-decoration-color: #008000">"Russian"</span>
-    context: <span style="color: #008000; text-decoration-color: #008000">"Historically influential language in Moldova; appears in Cyrillic script"</span>
-  - type: archive_identifier
-    name: <span style="color: #008000; text-decoration-color: #008000">"EAP699/23/1"</span>
-    context: <span style="color: #008000; text-decoration-color: #008000">"Endangered Archives Programme accession number"</span>
-  - type: url
-    name: <span style="color: #008000; text-decoration-color: #008000">"https://eap.bl.uk/archive-file/EAP699-23-1"</span>
-    context: <span style="color: #008000; text-decoration-color: #008000">"Catalogue record for the collection"</span>
+  - type: <span style="color: #008000; text-decoration-color: #008000">"unknown"</span>
+    name: <span style="color: #008000; text-decoration-color: #008000">"Image 0"</span>
+    context: <span style="color: #008000; text-decoration-color: #008000">"No text present"</span>
+  - type: <span style="color: #008000; text-decoration-color: #008000">"unknown"</span>
+    name: <span style="color: #008000; text-decoration-color: #008000">"Image 1"</span>
+    context: <span style="color: #008000; text-decoration-color: #008000">"No text present"</span>
+  - type: <span style="color: #008000; text-decoration-color: #008000">"unknown"</span>
+    name: <span style="color: #008000; text-decoration-color: #008000">"Image 2"</span>
+    context: <span style="color: #008000; text-decoration-color: #008000">"No text present"</span>
+  - type: <span style="color: #008000; text-decoration-color: #008000">"unknown"</span>
+    name: <span style="color: #008000; text-decoration-color: #008000">"Image 3"</span>
+    context: <span style="color: #008000; text-decoration-color: #008000">"No text present"</span>
 ---
 ```
 </pre>
@@ -741,12 +843,241 @@ entities:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="n">manifest_uris</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="k">for</span> <span class="n">manifest</span> <span class="ow">in</span> <span class="n">manifest_uris</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing manifest: </span><span class="si">{</span><span class="n">manifest</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;output/&quot;</span> <span class="o">+</span> <span class="n">manifest</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">manifest</span><span class="si">}</span><span class="s2">, already processed.&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
         <span class="p">{</span>
-            <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="n">manifest</span>
+            <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="n">manifest</span><span class="p">,</span>
+            <span class="s2">&quot;start_index&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="c1">#end_index&quot;: 3,</span>
+            <span class="s2">&quot;image_width&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Processing manifest: <span style="color: #0000ff; text-decoration-color: #0000ff; text-decoration: underline">https://eap.bl.uk/archive-file/EAP1477-1-1-3/manifest</span>
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">Successfully fetched manifest for Caja </span><span style="color: #008000; text-decoration-color: #008000; font-weight: bold">3</span>
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Found <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">1317</span> images in manifest
+</pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Extracting text from images:   0%|          | 1/1317 [00:07&lt;2:48:39,  7.69s/it]
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">BadRequestError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">55</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping </span><span class="si">{</span><span class="n">manifest</span><span class="si">}</span><span class="s2">, already processed.&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="k">continue</span>
+<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">output</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="p">{</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>         <span class="s2">&quot;box_manifest_uri&quot;</span><span class="p">:</span> <span class="n">manifest</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="s2">&quot;start_index&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>         <span class="c1">#end_index&quot;: 3,</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="s2">&quot;image_width&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="p">}</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="p">)</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/pregel/main.py:3094,</span> in <span class="ni">Pregel.invoke</span><span class="nt">(self, input, config, context, stream_mode, print_mode, output_keys, interrupt_before, interrupt_after, durability, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">3091</span> <span class="n">chunks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">   </span><span class="mi">3092</span> <span class="n">interrupts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Interrupt</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">-&gt; </span><span class="mi">3094</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">3095</span>     <span class="nb">input</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3096</span>     <span class="n">config</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3097</span>     <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3098</span>     <span class="n">stream_mode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;updates&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">3099</span>     <span class="k">if</span> <span class="n">stream_mode</span> <span class="o">==</span> <span class="s2">&quot;values&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">3100</span>     <span class="k">else</span> <span class="n">stream_mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3101</span>     <span class="n">print_mode</span><span class="o">=</span><span class="n">print_mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3102</span>     <span class="n">output_keys</span><span class="o">=</span><span class="n">output_keys</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3103</span>     <span class="n">interrupt_before</span><span class="o">=</span><span class="n">interrupt_before</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3104</span>     <span class="n">interrupt_after</span><span class="o">=</span><span class="n">interrupt_after</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3105</span>     <span class="n">durability</span><span class="o">=</span><span class="n">durability</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3106</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">3107</span> <span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">3108</span>     <span class="k">if</span> <span class="n">stream_mode</span> <span class="o">==</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">3109</span>         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/pregel/main.py:2679,</span> in <span class="ni">Pregel.stream</span><span class="nt">(self, input, config, context, stream_mode, print_mode, output_keys, interrupt_before, interrupt_after, durability, subgraphs, debug, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2677</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">loop</span><span class="o">.</span><span class="n">match_cached_writes</span><span class="p">():</span>
+<span class="g g-Whitespace">   </span><span class="mi">2678</span>     <span class="n">loop</span><span class="o">.</span><span class="n">output_writes</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">writes</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2679</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2680</span>     <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">loop</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="o">.</span><span class="n">writes</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">2681</span>     <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">step_timeout</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2682</span>     <span class="n">get_waiter</span><span class="o">=</span><span class="n">get_waiter</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2683</span>     <span class="n">schedule_task</span><span class="o">=</span><span class="n">loop</span><span class="o">.</span><span class="n">accept_push</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2684</span> <span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">2685</span>     <span class="c1"># emit output</span>
+<span class="g g-Whitespace">   </span><span class="mi">2686</span>     <span class="k">yield from</span> <span class="n">_output</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2687</span>         <span class="n">stream_mode</span><span class="p">,</span> <span class="n">print_mode</span><span class="p">,</span> <span class="n">subgraphs</span><span class="p">,</span> <span class="n">stream</span><span class="o">.</span><span class="n">get</span><span class="p">,</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span>
+<span class="g g-Whitespace">   </span><span class="mi">2688</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2689</span> <span class="n">loop</span><span class="o">.</span><span class="n">after_tick</span><span class="p">()</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/pregel/_runner.py:167,</span> in <span class="ni">PregelRunner.tick</span><span class="nt">(self, tasks, reraise, timeout, retry_policy, get_waiter, schedule_task)</span>
+<span class="g g-Whitespace">    </span><span class="mi">165</span> <span class="n">t</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">166</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">167</span>     <span class="n">run_with_retry</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">168</span>         <span class="n">t</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">169</span>         <span class="n">retry_policy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">170</span>         <span class="n">configurable</span><span class="o">=</span><span class="p">{</span>
+<span class="g g-Whitespace">    </span><span class="mi">171</span>             <span class="n">CONFIG_KEY_CALL</span><span class="p">:</span> <span class="n">partial</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">172</span>                 <span class="n">_call</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">173</span>                 <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">t</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span>                 <span class="n">retry_policy</span><span class="o">=</span><span class="n">retry_policy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span>                 <span class="n">futures</span><span class="o">=</span><span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">futures</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span>                 <span class="n">schedule_task</span><span class="o">=</span><span class="n">schedule_task</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">177</span>                 <span class="n">submit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">submit</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">178</span>             <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span>         <span class="p">},</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span>     <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span> <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/pregel/_retry.py:42,</span> in <span class="ni">run_with_retry</span><span class="nt">(task, retry_policy, configurable)</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="n">task</span><span class="o">.</span><span class="n">writes</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span>     <span class="c1"># run the task</span>
+<span class="ne">---&gt; </span><span class="mi">42</span>     <span class="k">return</span> <span class="n">task</span><span class="o">.</span><span class="n">proc</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span> <span class="k">except</span> <span class="n">ParentCommand</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span>     <span class="n">ns</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">CONF</span><span class="p">][</span><span class="n">CONFIG_KEY_CHECKPOINT_NS</span><span class="p">]</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/_internal/_runnable.py:656,</span> in <span class="ni">RunnableSeq.invoke</span><span class="nt">(self, input, config, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">654</span>     <span class="c1"># run in context</span>
+<span class="g g-Whitespace">    </span><span class="mi">655</span>     <span class="k">with</span> <span class="n">set_config_context</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">run</span><span class="p">)</span> <span class="k">as</span> <span class="n">context</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">656</span>         <span class="nb">input</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">invoke</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">657</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">658</span>     <span class="nb">input</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/langgraph/_internal/_runnable.py:400,</span> in <span class="ni">RunnableCallable.invoke</span><span class="nt">(self, input, config, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">398</span>         <span class="n">run_manager</span><span class="o">.</span><span class="n">on_chain_end</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">400</span>     <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">401</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">recurse</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">Runnable</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">402</span>     <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<span class="nn">Cell In[51], line 84,</span> in <span class="ni">text_recognition</span><span class="nt">(state)</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span>     <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span>         <span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span>         <span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+<span class="g g-Whitespace">     </span><span class="mi">80</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">81</span>     <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Extracting text from images&quot;</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">84</span>         <span class="n">chat_completion</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">85</span> 	        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">86</span>             <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+<span class="g g-Whitespace">     </span><span class="mi">87</span>                 <span class="p">{</span>
+<span class="g g-Whitespace">     </span><span class="mi">88</span>                     <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">89</span>                     <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="g g-Whitespace">     </span><span class="mi">90</span>                         <span class="p">{</span>
+<span class="g g-Whitespace">     </span><span class="mi">91</span>                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">92</span>                             <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="g g-Whitespace">     </span><span class="mi">93</span>                                 <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">[</span><span class="s2">&quot;image_url&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">94</span>                             <span class="p">}</span>
+<span class="g g-Whitespace">     </span><span class="mi">95</span>                         <span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">96</span>                         <span class="p">{</span>
+<span class="g g-Whitespace">     </span><span class="mi">97</span>                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">98</span>                             <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Extract text from the page. Preserve reading order. Retain formatting as markdown.&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">99</span>                         <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">100</span>                     <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">101</span>                 <span class="p">}</span>
+<span class="g g-Whitespace">    </span><span class="mi">102</span>             <span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">103</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">105</span>         <span class="n">image</span><span class="p">[</span><span class="s2">&quot;markdown_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chat_completion</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+<span class="g g-Whitespace">    </span><span class="mi">106</span>         <span class="c1"># img_b64 = load_image(image[&quot;image_url&quot;])</span>
+<span class="g g-Whitespace">    </span><span class="mi">107</span>         <span class="c1"># if img_b64:</span>
+<span class="g g-Whitespace">    </span><span class="mi">108</span>         <span class="c1">#     print(f&quot;Processing image: {image[&#39;image_url&#39;]}&quot;)</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">130</span>         <span class="c1">#     result = llm.invoke([msg])</span>
+<span class="g g-Whitespace">    </span><span class="mi">131</span>         <span class="c1">#     image[&quot;markdown_text&quot;] = result.content</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/openai/_utils/_utils.py:286,</span> in <span class="ni">required_args.&lt;locals&gt;.inner.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span>             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Missing required argument: </span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">missing</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">286</span> <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/openai/resources/chat/completions/completions.py:1156,</span> in <span class="ni">Completions.create</span><span class="nt">(self, messages, model, audio, frequency_penalty, function_call, functions, logit_bias, logprobs, max_completion_tokens, max_tokens, metadata, modalities, n, parallel_tool_calls, prediction, presence_penalty, prompt_cache_key, reasoning_effort, response_format, safety_identifier, seed, service_tier, stop, store, stream, stream_options, temperature, tool_choice, tools, top_logprobs, top_p, user, verbosity, web_search_options, extra_headers, extra_query, extra_body, timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1110</span> <span class="nd">@required_args</span><span class="p">([</span><span class="s2">&quot;messages&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;messages&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">])</span>
+<span class="g g-Whitespace">   </span><span class="mi">1111</span> <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1112</span>     <span class="bp">self</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1153</span>     <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Timeout</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">NotGiven</span> <span class="o">=</span> <span class="n">not_given</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1154</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChatCompletion</span> <span class="o">|</span> <span class="n">Stream</span><span class="p">[</span><span class="n">ChatCompletionChunk</span><span class="p">]:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1155</span>     <span class="n">validate_response_format</span><span class="p">(</span><span class="n">response_format</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1156</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1157</span>         <span class="s2">&quot;/chat/completions&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1158</span>         <span class="n">body</span><span class="o">=</span><span class="n">maybe_transform</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1159</span>             <span class="p">{</span>
+<span class="g g-Whitespace">   </span><span class="mi">1160</span>                 <span class="s2">&quot;messages&quot;</span><span class="p">:</span> <span class="n">messages</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1161</span>                 <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1162</span>                 <span class="s2">&quot;audio&quot;</span><span class="p">:</span> <span class="n">audio</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1163</span>                 <span class="s2">&quot;frequency_penalty&quot;</span><span class="p">:</span> <span class="n">frequency_penalty</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1164</span>                 <span class="s2">&quot;function_call&quot;</span><span class="p">:</span> <span class="n">function_call</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1165</span>                 <span class="s2">&quot;functions&quot;</span><span class="p">:</span> <span class="n">functions</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1166</span>                 <span class="s2">&quot;logit_bias&quot;</span><span class="p">:</span> <span class="n">logit_bias</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1167</span>                 <span class="s2">&quot;logprobs&quot;</span><span class="p">:</span> <span class="n">logprobs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1168</span>                 <span class="s2">&quot;max_completion_tokens&quot;</span><span class="p">:</span> <span class="n">max_completion_tokens</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1169</span>                 <span class="s2">&quot;max_tokens&quot;</span><span class="p">:</span> <span class="n">max_tokens</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1170</span>                 <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>                 <span class="s2">&quot;modalities&quot;</span><span class="p">:</span> <span class="n">modalities</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1172</span>                 <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1173</span>                 <span class="s2">&quot;parallel_tool_calls&quot;</span><span class="p">:</span> <span class="n">parallel_tool_calls</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span>                 <span class="s2">&quot;prediction&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1175</span>                 <span class="s2">&quot;presence_penalty&quot;</span><span class="p">:</span> <span class="n">presence_penalty</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1176</span>                 <span class="s2">&quot;prompt_cache_key&quot;</span><span class="p">:</span> <span class="n">prompt_cache_key</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1177</span>                 <span class="s2">&quot;reasoning_effort&quot;</span><span class="p">:</span> <span class="n">reasoning_effort</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1178</span>                 <span class="s2">&quot;response_format&quot;</span><span class="p">:</span> <span class="n">response_format</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1179</span>                 <span class="s2">&quot;safety_identifier&quot;</span><span class="p">:</span> <span class="n">safety_identifier</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1180</span>                 <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">seed</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1181</span>                 <span class="s2">&quot;service_tier&quot;</span><span class="p">:</span> <span class="n">service_tier</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1182</span>                 <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="n">stop</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1183</span>                 <span class="s2">&quot;store&quot;</span><span class="p">:</span> <span class="n">store</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1184</span>                 <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="n">stream</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1185</span>                 <span class="s2">&quot;stream_options&quot;</span><span class="p">:</span> <span class="n">stream_options</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1186</span>                 <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">temperature</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1187</span>                 <span class="s2">&quot;tool_choice&quot;</span><span class="p">:</span> <span class="n">tool_choice</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1188</span>                 <span class="s2">&quot;tools&quot;</span><span class="p">:</span> <span class="n">tools</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1189</span>                 <span class="s2">&quot;top_logprobs&quot;</span><span class="p">:</span> <span class="n">top_logprobs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span>                 <span class="s2">&quot;top_p&quot;</span><span class="p">:</span> <span class="n">top_p</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span>                 <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span>                 <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="n">verbosity</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>                 <span class="s2">&quot;web_search_options&quot;</span><span class="p">:</span> <span class="n">web_search_options</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1194</span>             <span class="p">},</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span>             <span class="n">completion_create_params</span><span class="o">.</span><span class="n">CompletionCreateParamsStreaming</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span>             <span class="k">if</span> <span class="n">stream</span>
+<span class="g g-Whitespace">   </span><span class="mi">1197</span>             <span class="k">else</span> <span class="n">completion_create_params</span><span class="o">.</span><span class="n">CompletionCreateParamsNonStreaming</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1198</span>         <span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1199</span>         <span class="n">options</span><span class="o">=</span><span class="n">make_request_options</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1200</span>             <span class="n">extra_headers</span><span class="o">=</span><span class="n">extra_headers</span><span class="p">,</span> <span class="n">extra_query</span><span class="o">=</span><span class="n">extra_query</span><span class="p">,</span> <span class="n">extra_body</span><span class="o">=</span><span class="n">extra_body</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span>
+<span class="g g-Whitespace">   </span><span class="mi">1201</span>         <span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1202</span>         <span class="n">cast_to</span><span class="o">=</span><span class="n">ChatCompletion</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1203</span>         <span class="n">stream</span><span class="o">=</span><span class="n">stream</span> <span class="ow">or</span> <span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1204</span>         <span class="n">stream_cls</span><span class="o">=</span><span class="n">Stream</span><span class="p">[</span><span class="n">ChatCompletionChunk</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1205</span>     <span class="p">)</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/openai/_base_client.py:1259,</span> in <span class="ni">SyncAPIClient.post</span><span class="nt">(self, path, cast_to, body, options, files, stream, stream_cls)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1245</span> <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1246</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1247</span>     <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1254</span>     <span class="n">stream_cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">_StreamT</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1255</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResponseT</span> <span class="o">|</span> <span class="n">_StreamT</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1256</span>     <span class="n">opts</span> <span class="o">=</span> <span class="n">FinalRequestOptions</span><span class="o">.</span><span class="n">construct</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1257</span>         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">to_httpx_files</span><span class="p">(</span><span class="n">files</span><span class="p">),</span> <span class="o">**</span><span class="n">options</span>
+<span class="g g-Whitespace">   </span><span class="mi">1258</span>     <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1259</span>     <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">ResponseT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">cast_to</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">,</span> <span class="n">stream_cls</span><span class="o">=</span><span class="n">stream_cls</span><span class="p">))</span>
+
+<span class="nn">File ~/anaconda3/lib/python3.10/site-packages/openai/_base_client.py:1047,</span> in <span class="ni">SyncAPIClient.request</span><span class="nt">(self, cast_to, options, stream, stream_cls)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1044</span>             <span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1046</span>         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Re-raising status error&quot;</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1047</span>         <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_status_error_from_response</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1049</span>     <span class="k">break</span>
+<span class="g g-Whitespace">   </span><span class="mi">1051</span> <span class="k">assert</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;could not resolve response (should never happen)&quot;</span>
+
+<span class="ne">BadRequestError</span>: Error code: 400 - {&#39;message&#39;: &#39;unknown error in the model inference server trace_id: 36368286256444696b67032ebeefd29c&#39;, &#39;type&#39;: &#39;api_error&#39;}
 </pre></div>
 </div>
 </div>
@@ -818,9 +1149,8 @@ entities:
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing Workflows</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#select-model">Select Model</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langchain">Langchain</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Processing Workflows</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#web-requests">Web Requests</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-requirements">Workflow Requirements</a></li>

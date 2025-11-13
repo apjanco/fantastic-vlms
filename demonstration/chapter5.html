@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9e498a27" />
@@ -182,9 +182,10 @@
 <li class="toctree-l1"><a class="reference internal" href="chapter1.html">Fetching Manifests and Images from the Endangered Archives Programme</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="chapter3.html">Processing Workflows</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="chapter2.html">Working from a folder of images</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="chapter3.html">Processing Workflows</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="chapter4.html">Evaluation of Generated Research Data and Metadata</a></li>
@@ -350,6 +351,18 @@ document.write(`
 <li><p>Make a searchable static website or a spreadsheet from the output</p></li>
 <li><p>Document SVG (readable copy of the image)</p></li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the output data from output dir</span>
+<span class="c1"># save the images if not on system </span>
+<span class="c1"># for each image, create a md page with yaml front matter, be sure to include item grouping</span>
+<span class="c1"># create template to load images and text</span>
+<span class="c1"># create an index with PageFind </span>
+<span class="c1"># run build and save in _site </span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
