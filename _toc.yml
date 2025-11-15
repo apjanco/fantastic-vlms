@@ -7,7 +7,6 @@ parts:
   - caption: Introduction and context
     chapters:
     - file: introduction/chapter1
-    - file: introduction/chapter2
   - caption: Technical Demonstration
     chapters:
     - file: demonstration/chapter1
