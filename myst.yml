@@ -10,6 +10,11 @@ project:
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
 site:
   template: book-theme
-  # options:
-  #   favicon: favicon.ico
-  #   logo: site_logo.png
+  options:
+    favicon: logo-light.png
+    logo: logo-dark.png
+    logo_dark: logo-light.png
+    hide_footer_branding: true
+    hide_toc: false
+    hide_outline: true
+    style: _static/custom.css
