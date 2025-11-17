@@ -1,0 +1,22 @@
+{
+  "image_id": "https://images.eap.bl.uk/EAP1477/EAP1477_1_1_1/3.jp2/full/full/0/default.jpg",
+  "canvas_label": "3",
+  "original_dimensions": {
+    "width": 2667,
+    "height": 4000
+  },
+  "zoom_level": 3,
+  "scale_factor": 0.125,
+  "scaled_dimensions": {
+    "width": 333,
+    "height": 500
+  },
+  "tile_size": 256,
+  "grid_size": {
+    "columns": 2,
+    "rows": 2
+  },
+  "total_tiles": 4,
+  "format": "jpg",
+  "quality": "default"
+}
