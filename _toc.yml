@@ -13,6 +13,7 @@ parts:
     - file: demonstration/chapter2
     - file: demonstration/chapter3
     - file: demonstration/chapter4
+    - file: demonstration/chapter5
   - caption: Workshop Exercises
     chapters:
     - file: exercises/chapter1
