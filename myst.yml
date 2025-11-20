@@ -14,7 +14,10 @@ site:
     favicon: logo-light.png
     logo: logo-dark.png
     logo_dark: logo-light.png
+    #logo_text: Fantastic VLMS
     hide_footer_branding: true
     hide_toc: false
     hide_outline: true
     style: _static/custom.css
+  parts:
+    footer: footer.md
