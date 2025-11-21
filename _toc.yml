@@ -16,4 +16,3 @@ parts:
   - caption: Workshop Exercises
     chapters:
     - file: exercises/chapter1
-    - file: exercises/chapter2
