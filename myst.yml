@@ -6,7 +6,7 @@ project:
   # description:
   # keywords: []
   # authors: []
-  github: https://github.com/apjanco/fantastic-vlms
+  #github: https://github.com/apjanco/fantastic-vlms
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
   toc:
     - file: introduction/chapter1.md

@@ -1,4 +1,4 @@
-# Workshop Activities
+# Activity
 
 The second half of the workshop is a hands-on exercise with a range of materials from the Endangered Archives Programme. 
 We hope that participants will leave the workshop with the code and experience needed to process materials for their own research. 
