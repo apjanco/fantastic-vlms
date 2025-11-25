@@ -10,9 +10,6 @@ parts:
   - caption: Technical Demonstration
     chapters:
     - file: demonstration/chapter1
-    - file: demonstration/chapter2
-    - file: demonstration/chapter3
-    - file: demonstration/chapter4
   - caption: Workshop Exercises
     chapters:
     - file: exercises/chapter1

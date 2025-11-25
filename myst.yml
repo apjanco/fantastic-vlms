@@ -2,12 +2,18 @@
 version: 1
 project:
   id: 311ea5c8-f670-4836-a969-632de49dd2c0
+  edit_url: null
   # title:
   # description:
   # keywords: []
   # authors: []
   github: https://github.com/apjanco/fantastic-vlms
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
+  toc:
+    - file: introduction/chapter1.md
+    - file: demonstration/chapter1.ipynb
+    - file: exercises/chapter1.md
+
 site:
   template: book-theme
   options:
@@ -21,3 +27,5 @@ site:
     style: _static/custom.css
   parts:
     footer: footer.md
+
+  
