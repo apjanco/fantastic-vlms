@@ -3,7 +3,6 @@ version: 1
 project:
   id: 311ea5c8-f670-4836-a969-632de49dd2c0
   edit_url: null
-  # title:
   # description:
   # keywords: []
   # authors: []
@@ -25,6 +24,7 @@ site:
     hide_toc: false
     hide_outline: true
     style: _static/custom.css
+    logo_text: Auto-Cataloging Research Materials from the Endangered Archives Programme
   parts:
     footer: footer.md
 
